@@ -1,0 +1,6 @@
+CREATE TABLE body_weight(
+    id VARCHAR(255) NOT NULL PRIMARY KEY UNIQUE,
+    user_id VARCHAR(255) NOT NULL,
+    logged_on DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+)

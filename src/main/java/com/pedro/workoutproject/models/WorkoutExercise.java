@@ -19,7 +19,7 @@ public class WorkoutExercise {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private String id;
     private Integer weight;
     private Integer sets;
     private Integer reps;
@@ -30,7 +30,7 @@ public class WorkoutExercise {
     @ManyToOne
     @JoinColumn(name = "workoutId")
     @JsonBackReference
-    private Workout workout;
+    private Workout workoutId;
     @ManyToOne
     @JoinColumn(name = "exerciseId")
     @JsonBackReference

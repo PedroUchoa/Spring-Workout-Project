@@ -19,7 +19,7 @@ public class Workout {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private String id;
     private String notes;
     @CreationTimestamp
     private LocalDateTime createdOn;

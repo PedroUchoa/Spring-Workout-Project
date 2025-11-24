@@ -16,7 +16,7 @@ public class Exercise {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private String id;
     private String name;
     private String type;
     @OneToMany(mappedBy = "exerciseId")

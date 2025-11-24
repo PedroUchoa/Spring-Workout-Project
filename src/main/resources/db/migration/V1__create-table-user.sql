@@ -1,0 +1,8 @@
+CREATE TABLE user(
+    id VARCHAR(255) NOT NULL PRIMARY KEY UNIQUE,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(5) NOT NULL,
+    created_on DATETIME NOT NULL,
+    update_on DATETIME
+)

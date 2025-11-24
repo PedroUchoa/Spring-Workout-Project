@@ -18,7 +18,7 @@ public class BodyWeight {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private String id;
     @CreationTimestamp
     private LocalDateTime loggedOn;
     @ManyToOne(fetch = FetchType.EAGER)
