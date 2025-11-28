@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class BodyWeightService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional
     public ReturnBodyWeightDto createBodyWeight(CreateBodyWeightDto createBodyWeightDto){
         User user = userRepository.getReferenceById(createBodyWeightDto.userId());
         BodyWeight bodyWeight = new BodyWeight(createBodyWeightDto.value(),user);
@@ -39,6 +41,7 @@ public class BodyWeightService {
         return  bodyWeightRepository.findAllByUserId(userId, pageable).map(ReturnBodyWeightDto::new);
     }
 
+    @Transactional
     public ReturnBodyWeightDto updateBodyWeight(String id, UpdateBodyWeightDto updateBodyWeightDto){
         BodyWeight bodyWeight = bodyWeightRepository.getReferenceById(id);
         bodyWeight.update(updateBodyWeightDto);
@@ -46,6 +49,7 @@ public class BodyWeightService {
         return new ReturnBodyWeightDto(bodyWeight);
     }
 
+    @Transactional
     public void deleteBodyWeight(String id){
         BodyWeight bodyWeight = bodyWeightRepository.getReferenceById(id);
         bodyWeightRepository.delete(bodyWeight);

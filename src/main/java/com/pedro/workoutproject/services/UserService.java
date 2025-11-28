@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -18,7 +19,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-
+    @Transactional
     public ReturnUserDto createUser(CreateUserDto createUserDto) {
         String encryptedPassword = new BCryptPasswordEncoder().encode(createUserDto.password());
         User user = userRepository.save(new User(createUserDto.email(), encryptedPassword, Role.USER));
@@ -40,6 +41,7 @@ public class UserService {
         return new ReturnUserDto(user);
     }
 
+    @Transactional
     public ReturnUserDto updateUser(CreateUserDto createUserDto, String id){
         User user = userRepository.getReferenceById(id);
         user.updateUser(createUserDto);
@@ -47,6 +49,7 @@ public class UserService {
         return new ReturnUserDto(user);
     }
 
+    @Transactional
     public void deleteUser(String id){
         User user = userRepository.getReferenceById(id);
         userRepository.delete(user);

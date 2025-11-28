@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class WorkoutExerciseService {
     @Autowired
     private ExerciseRepository exerciseRepository;
 
+    @Transactional
     public ReturnWorkoutExerciseDto createWorkoutExercise(CreateWorkoutExerciseDto createWorkoutExerciseDto){
         Workout workout = workoutRepository.getReferenceById(createWorkoutExerciseDto.workoutId());
         Exercise exercise = exerciseRepository.getExerciseByName(createWorkoutExerciseDto.exerciseName());
@@ -44,6 +46,7 @@ public class WorkoutExerciseService {
         return workoutExerciseRepository.findAll(pageable).map(ReturnWorkoutExerciseDto::new);
     }
 
+    @Transactional
     public ReturnWorkoutExerciseDto updateWorkoutExercise(UpdateWorkoutExerciseDto updateWorkoutExerciseDto, String id){
         WorkoutExercise workoutExercise = workoutExerciseRepository.getReferenceById(id);
         workoutExercise.update(updateWorkoutExerciseDto);
@@ -51,6 +54,7 @@ public class WorkoutExerciseService {
         return new ReturnWorkoutExerciseDto(workoutExercise);
     }
 
+    @Transactional
     public void deleteWorkoutExercise(String id){
         WorkoutExercise workoutExercise = workoutExerciseRepository.getReferenceById(id);
         workoutExerciseRepository.delete(workoutExercise);
