@@ -1,15 +1,18 @@
 package com.pedro.workoutproject.models;
 
 
+import com.pedro.workoutproject.dtos.userDtos.CreateUserDto;
 import com.pedro.workoutproject.enumerated.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,11 +34,18 @@ public class User implements UserDetails {
     private Role role;
     @CreationTimestamp
     private LocalDateTime createdOn;
+    @UpdateTimestamp
     private LocalDateTime updateOn;
     @OneToMany(mappedBy = "userId")
-    private List<BodyWeight> weightList;
+    private List<BodyWeight> weightList = new ArrayList<>();
     @OneToMany(mappedBy = "userId")
-    private List<Workout> workoutList;
+    private List<Workout> workoutList = new ArrayList<>();
+
+    public User(String email, String encryptedPassword, Role role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -66,5 +76,17 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void updateUser(CreateUserDto createUserDto) {
+
+        if(!createUserDto.email().isBlank()){
+            setEmail(createUserDto.email());
+        }
+
+        if(!createUserDto.password().isBlank()){
+            setEmail(createUserDto.password());
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 package com.pedro.workoutproject.models;
 
+import com.pedro.workoutproject.dtos.exerciseDtos.CreateExerciseDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,4 +22,18 @@ public class Exercise {
     private String type;
     @OneToMany(mappedBy = "exerciseId")
     List<WorkoutExercise> workoutExerciseList;
+
+    public Exercise(CreateExerciseDto createExerciseDto) {
+        this.name = createExerciseDto.name();
+        this.type = createExerciseDto.type();
+    }
+
+    public void update(CreateExerciseDto createExerciseDto) {
+        if(!createExerciseDto.name().isBlank()){
+            setName(createExerciseDto.name());
+        }
+        if(!createExerciseDto.type().isBlank()){
+            setType(createExerciseDto.type());
+        }
+    }
 }
