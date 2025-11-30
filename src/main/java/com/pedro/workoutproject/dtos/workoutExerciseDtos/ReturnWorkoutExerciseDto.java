@@ -7,6 +7,7 @@ import com.pedro.workoutproject.models.WorkoutExercise;
 import java.time.LocalDateTime;
 
 public record ReturnWorkoutExerciseDto(
+        String id,
         Integer weight,
         Integer sets,
         Integer reps,
@@ -17,6 +18,6 @@ public record ReturnWorkoutExerciseDto(
         ReturnExerciseDto exerciseDto
 ) {
     public ReturnWorkoutExerciseDto(WorkoutExercise workoutExercise) {
-        this(workoutExercise.getWeight(), workoutExercise.getSets(), workoutExercise.getReps(), workoutExercise.getNotes(), workoutExercise.getCreatedOn(),workoutExercise.getUpdateOn(), new ReturnWorkoutDto(workoutExercise.getWorkoutId()),new ReturnExerciseDto(workoutExercise.getExerciseId()));
+        this(workoutExercise.getId(), workoutExercise.getWeight(), workoutExercise.getSets(), workoutExercise.getReps(), workoutExercise.getNotes(), workoutExercise.getCreatedOn(),workoutExercise.getUpdateOn(), new ReturnWorkoutDto(workoutExercise.getWorkoutId()),new ReturnExerciseDto(workoutExercise.getExerciseId()));
     }
 }

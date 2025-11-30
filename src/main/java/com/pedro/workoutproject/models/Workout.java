@@ -24,10 +24,12 @@ public class Workout {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String notes;
+    private Boolean isActive = true;
+    private LocalDateTime deleteOn;
     @CreationTimestamp
     private LocalDateTime createdOn;
     @UpdateTimestamp
-    private LocalDateTime updatedOn;
+    private LocalDateTime updateOn;
     private LocalDateTime startedOn;
     private LocalDateTime finishedOn;
     @ManyToOne
@@ -42,6 +44,7 @@ public class Workout {
         this.startedOn = createWorkoutDto.startedOn();
         this.finishedOn = createWorkoutDto.finishedOn();
         this.userId = user;
+        this.isActive = true;
     }
 
     public void update(UpdateWorkoutDto updateWorkoutDto) {
@@ -49,10 +52,16 @@ public class Workout {
             setNotes(updateWorkoutDto.notes());
         }
         if (updateWorkoutDto.startedOn() != null){
-            setUpdatedOn(updateWorkoutDto.startedOn());
+            setUpdateOn(updateWorkoutDto.startedOn());
         }
         if (updateWorkoutDto.finishedOn() != null){
             setFinishedOn(updateWorkoutDto.finishedOn());
         }
     }
+
+    public void disable() {
+        this.setIsActive(false);
+        this.setDeleteOn(LocalDateTime.now());
+    }
+
 }

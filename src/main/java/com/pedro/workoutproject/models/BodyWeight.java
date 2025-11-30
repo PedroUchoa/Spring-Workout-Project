@@ -23,7 +23,9 @@ public class BodyWeight {
     private Double value;
     @CreationTimestamp
     private LocalDateTime loggedOn;
-    @ManyToOne(fetch = FetchType.EAGER)
+    private Boolean isActive;
+    private LocalDateTime deleteOn;
+    @ManyToOne
     @JoinColumn(name = "userId")
     @JsonBackReference
     private User userId;
@@ -31,11 +33,17 @@ public class BodyWeight {
     public BodyWeight(Double  value, User user) {
         this.value = value;
         this.userId = user;
+        this.isActive = true;
     }
 
     public void update(UpdateBodyWeightDto updateBodyWeightDto) {
         if(updateBodyWeightDto.value() != null){
             setValue(updateBodyWeightDto.value());
         }
+    }
+
+    public void disable() {
+        this.setIsActive(false);
+        this.setDeleteOn(LocalDateTime.now());
     }
 }

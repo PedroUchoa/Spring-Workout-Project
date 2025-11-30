@@ -31,24 +31,24 @@ public class WorkoutExerciseService {
 
     @Transactional
     public ReturnWorkoutExerciseDto createWorkoutExercise(CreateWorkoutExerciseDto createWorkoutExerciseDto){
-        Workout workout = workoutRepository.getReferenceById(createWorkoutExerciseDto.workoutId());
-        Exercise exercise = exerciseRepository.getExerciseByName(createWorkoutExerciseDto.exerciseName());
+        Workout workout = workoutRepository.findByIdAndIsActiveTrue(createWorkoutExerciseDto.workoutId()).orElseThrow(()->new RuntimeException("teste"));
+        Exercise exercise = exerciseRepository.getExerciseByNameAndIsActiveTrue(createWorkoutExerciseDto.exerciseName()).orElseThrow(()->new RuntimeException("teste"));
         WorkoutExercise workoutExercise = workoutExerciseRepository.save(new WorkoutExercise(createWorkoutExerciseDto,workout,exercise));
         return new ReturnWorkoutExerciseDto(workoutExercise);
     }
 
-    public ReturnWorkoutExerciseDto findCreateWorkoutExerciseById(String id){
-        WorkoutExercise workoutExercise = workoutExerciseRepository.getReferenceById(id);
+    public ReturnWorkoutExerciseDto findWorkoutExerciseById(String id){
+        WorkoutExercise workoutExercise = workoutExerciseRepository.findByIdAndIsActiveTrue(id).orElseThrow(()->new RuntimeException("teste"));
         return new ReturnWorkoutExerciseDto(workoutExercise);
     }
 
     public Page<ReturnWorkoutExerciseDto> getAllWorkoutExercise(Pageable pageable){
-        return workoutExerciseRepository.findAll(pageable).map(ReturnWorkoutExerciseDto::new);
+        return workoutExerciseRepository.findAllByIsActiveTrue(pageable).map(ReturnWorkoutExerciseDto::new);
     }
 
     @Transactional
     public ReturnWorkoutExerciseDto updateWorkoutExercise(UpdateWorkoutExerciseDto updateWorkoutExerciseDto, String id){
-        WorkoutExercise workoutExercise = workoutExerciseRepository.getReferenceById(id);
+        WorkoutExercise workoutExercise = workoutExerciseRepository.findByIdAndIsActiveTrue(id).orElseThrow(()->new RuntimeException("teste"));
         workoutExercise.update(updateWorkoutExerciseDto);
         workoutExerciseRepository.save(workoutExercise);
         return new ReturnWorkoutExerciseDto(workoutExercise);
@@ -56,8 +56,9 @@ public class WorkoutExerciseService {
 
     @Transactional
     public void deleteWorkoutExercise(String id){
-        WorkoutExercise workoutExercise = workoutExerciseRepository.getReferenceById(id);
-        workoutExerciseRepository.delete(workoutExercise);
+        WorkoutExercise workoutExercise = workoutExerciseRepository.findByIdAndIsActiveTrue(id).orElseThrow(()->new RuntimeException("teste"));
+        workoutExercise.disable();
+        workoutExerciseRepository.save(workoutExercise);
     }
 
 }

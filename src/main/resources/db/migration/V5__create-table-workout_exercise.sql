@@ -6,6 +6,8 @@ CREATE TABLE workout_exercise(
     sets int NOT NULL,
     reps int NOT NULL,
     notes text,
+    is_active BOOLEAN NOT NULL,
+    delete_on DATETIME,
     created_on DATETIME NOT NULL,
     update_on DATETIME,
     FOREIGN KEY (workout_id) REFERENCES workout(id),

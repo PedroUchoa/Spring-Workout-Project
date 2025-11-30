@@ -11,11 +11,13 @@ public record ReturnUserDto(String id,
                             String email,
                             LocalDateTime createdOn,
                             LocalDateTime updateOn,
+                            Boolean isActive,
+                            LocalDateTime deleteOn,
                             List<ReturnBodyWeightDto> weightList,
                             List<Workout> workoutList ) {
 
     public ReturnUserDto(User user){
-        this(user.getId(),user.getEmail(),user.getCreatedOn(),user.getUpdateOn(),user.getWeightList().stream().map(ReturnBodyWeightDto::new).toList(),user.getWorkoutList());
+        this(user.getId(),user.getEmail(),user.getCreatedOn(),user.getUpdateOn(), user.getIsActive(),user.getDeleteOn(),user.getWeightList().stream().map(ReturnBodyWeightDto::new).toList(),user.getWorkoutList());
     }
 
 }

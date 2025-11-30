@@ -19,10 +19,12 @@ public record ReturnWorkoutDto(String id,
         this(workout.getId(),
                 workout.getNotes(),
                 workout.getCreatedOn(),
-                workout.getUpdatedOn(),
+                workout.getUpdateOn(),
                 workout.getStartedOn(),
                 workout.getFinishedOn(),
                 new ReturnUserDto(workout.getUserId()),
                 workout.getWorkoutExerciseList().stream().map(ReturnWorkoutExerciseDto::new).toList());
     }
+
+
 }

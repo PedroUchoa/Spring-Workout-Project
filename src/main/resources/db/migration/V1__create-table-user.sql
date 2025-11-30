@@ -3,6 +3,8 @@ CREATE TABLE user(
     email VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role VARCHAR(5) NOT NULL,
+    is_active BOOLEAN NOT NULL,
+    delete_on DATETIME,
     created_on DATETIME NOT NULL,
     update_on DATETIME
 )

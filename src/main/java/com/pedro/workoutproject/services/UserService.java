@@ -27,32 +27,33 @@ public class UserService {
     }
 
     public Page<ReturnUserDto> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable).map(ReturnUserDto::new);
+        return userRepository.findAllByIsActiveTrue(pageable).map(ReturnUserDto::new);
     }
 
     public ReturnUserDto getUserById(String id) {
-        User user = userRepository.getReferenceById(id);
+        User user = userRepository.findByIdAndIsActiveTrue(id).orElseThrow(()->new RuntimeException("bla"));
         return new ReturnUserDto(user);
     }
 
     public ReturnUserDto getUserByTokenJWT(String token) {
         String id = JWT.decode(token).getClaim("id").asString();
-        User user = userRepository.getReferenceById(id);
+        User user = userRepository.findByIdAndIsActiveTrue(id).orElseThrow(()->new RuntimeException("bla"));
         return new ReturnUserDto(user);
     }
 
     @Transactional
     public ReturnUserDto updateUser(CreateUserDto createUserDto, String id){
-        User user = userRepository.getReferenceById(id);
+        User user = userRepository.findByIdAndIsActiveTrue(id).orElseThrow(()->new RuntimeException("bla"));
         user.updateUser(createUserDto);
-        userRepository.save(user);
-        return new ReturnUserDto(user);
+        User updatedUser = userRepository.save(user);
+        return new ReturnUserDto(updatedUser);
     }
 
     @Transactional
     public void deleteUser(String id){
-        User user = userRepository.getReferenceById(id);
-        userRepository.delete(user);
+        User user = userRepository.findByIdAndIsActiveTrue(id).orElseThrow(()->new RuntimeException("bla"));
+        user.disable();
+        userRepository.save(user);
     }
 
 }

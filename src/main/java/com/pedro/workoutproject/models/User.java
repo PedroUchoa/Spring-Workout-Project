@@ -32,6 +32,8 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private Boolean isActive = true;
+    private LocalDateTime deleteOn;
     @CreationTimestamp
     private LocalDateTime createdOn;
     @UpdateTimestamp
@@ -43,8 +45,9 @@ public class User implements UserDetails {
 
     public User(String email, String encryptedPassword, Role role) {
         this.email = email;
-        this.password = password;
+        this.password = encryptedPassword;
         this.role = role;
+        this.isActive = true;
     }
 
     @Override
@@ -89,4 +92,13 @@ public class User implements UserDetails {
         }
 
     }
+
+    public void disable() {
+        this.setIsActive(false);
+        this.setDeleteOn(LocalDateTime.now());
+        this.getWeightList().forEach(BodyWeight::disable);
+        this.getWorkoutList().forEach(Workout::disable);
+    }
+
+
 }

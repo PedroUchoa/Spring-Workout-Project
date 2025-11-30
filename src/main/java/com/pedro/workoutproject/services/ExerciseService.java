@@ -23,18 +23,18 @@ public class ExerciseService {
         return new ReturnExerciseDto(exercise);
     }
 
-    public Page<ReturnExerciseDto> getAllExerciser(Pageable pageable) {
-        return exerciseRepository.findAll(pageable).map(ReturnExerciseDto::new);
+    public Page<ReturnExerciseDto> getAllExercises(Pageable pageable) {
+        return exerciseRepository.findAllByIsActiveTrue(pageable).map(ReturnExerciseDto::new);
     }
 
     public ReturnExerciseDto getExerciseById(String id) {
-        Exercise exercise = exerciseRepository.getReferenceById(id);
+        Exercise exercise = exerciseRepository.findByIdAndIsActiveTrue(id).orElseThrow();
         return new ReturnExerciseDto(exercise);
     }
 
     @Transactional
     public ReturnExerciseDto updateExercise(CreateExerciseDto createExerciseDto, String id){
-        Exercise exercise = exerciseRepository.getReferenceById(id);
+        Exercise exercise = exerciseRepository.findByIdAndIsActiveTrue(id).orElseThrow();
         exercise.update(createExerciseDto);
         exerciseRepository.save(exercise);
         return new ReturnExerciseDto(exercise);
@@ -42,8 +42,9 @@ public class ExerciseService {
 
     @Transactional
     public void deleteExercise(String id){
-        Exercise exercise = exerciseRepository.getReferenceById(id);
-        exerciseRepository.delete(exercise);
+        Exercise exercise = exerciseRepository.findByIdAndIsActiveTrue(id).orElseThrow();
+        exercise.disable();
+        exerciseRepository.save(exercise);
     }
 
 

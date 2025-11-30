@@ -25,6 +25,8 @@ public class WorkoutExercise {
     private Integer sets;
     private Integer reps;
     private String notes;
+    private Boolean isActive = true;
+    private LocalDateTime deleteOn;
     @CreationTimestamp
     private LocalDateTime createdOn;
     private LocalDateTime updateOn;
@@ -44,6 +46,7 @@ public class WorkoutExercise {
         this.notes = createWorkoutExerciseDto.notes();
         this.workoutId=workout;
         this.exerciseId = exercise;
+        this.isActive =true;
     }
 
     public void update(UpdateWorkoutExerciseDto updateWorkoutExerciseDto) {
@@ -64,6 +67,11 @@ public class WorkoutExercise {
         if(!updateWorkoutExerciseDto.notes().isBlank()){
             setNotes(updateWorkoutExerciseDto.notes());
         }
-
     }
+
+    public void disable() {
+        this.setIsActive(false);
+        this.setDeleteOn(LocalDateTime.now());
+    }
+
 }
