@@ -6,6 +6,8 @@ import com.pedro.workoutproject.enumerated.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+@SQLRestriction(value = "is_active = true")
 public class User implements UserDetails {
 
     @Id
@@ -88,7 +91,7 @@ public class User implements UserDetails {
         }
 
         if(!createUserDto.password().isBlank()){
-            setEmail(createUserDto.password());
+            setPassword(createUserDto.password());
         }
 
     }

@@ -5,6 +5,8 @@ import com.pedro.workoutproject.dtos.bodyWeightDtos.UpdateBodyWeightDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+@SQLRestriction(value = "is_active = true")
 public class BodyWeight {
 
     @Id

@@ -3,6 +3,7 @@ package com.pedro.workoutproject.models;
 import com.pedro.workoutproject.dtos.exerciseDtos.CreateExerciseDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+@SQLRestriction(value = "is_active = true")
 public class Exercise {
 
     @Id

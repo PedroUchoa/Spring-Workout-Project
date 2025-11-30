@@ -6,6 +6,7 @@ import com.pedro.workoutproject.dtos.workoutDtos.UpdateWorkoutDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+@SQLRestriction(value = "is_active = true")
 public class Workout {
 
     @Id
@@ -62,6 +64,7 @@ public class Workout {
     public void disable() {
         this.setIsActive(false);
         this.setDeleteOn(LocalDateTime.now());
+        this.getWorkoutExerciseList().forEach(WorkoutExercise::disable);
     }
 
 }

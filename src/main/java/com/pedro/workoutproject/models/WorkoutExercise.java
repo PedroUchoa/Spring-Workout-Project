@@ -6,6 +6,7 @@ import com.pedro.workoutproject.dtos.workoutExerciseDtos.UpdateWorkoutExerciseDt
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+@SQLRestriction(value = "is_active = true")
 public class WorkoutExercise {
 
     @Id

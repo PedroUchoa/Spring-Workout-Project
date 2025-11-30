@@ -13,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+
 @Service
 public class UserService {
 
@@ -27,23 +29,23 @@ public class UserService {
     }
 
     public Page<ReturnUserDto> getAllUsers(Pageable pageable) {
-        return userRepository.findAllByIsActiveTrue(pageable).map(ReturnUserDto::new);
+        return userRepository.findAll(pageable).map(ReturnUserDto::new);
     }
 
     public ReturnUserDto getUserById(String id) {
-        User user = userRepository.findByIdAndIsActiveTrue(id).orElseThrow(()->new RuntimeException("bla"));
+        User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("bla"));
         return new ReturnUserDto(user);
     }
 
     public ReturnUserDto getUserByTokenJWT(String token) {
         String id = JWT.decode(token).getClaim("id").asString();
-        User user = userRepository.findByIdAndIsActiveTrue(id).orElseThrow(()->new RuntimeException("bla"));
+        User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("bla"));
         return new ReturnUserDto(user);
     }
 
     @Transactional
     public ReturnUserDto updateUser(CreateUserDto createUserDto, String id){
-        User user = userRepository.findByIdAndIsActiveTrue(id).orElseThrow(()->new RuntimeException("bla"));
+        User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("bla"));
         user.updateUser(createUserDto);
         User updatedUser = userRepository.save(user);
         return new ReturnUserDto(updatedUser);
@@ -51,7 +53,7 @@ public class UserService {
 
     @Transactional
     public void deleteUser(String id){
-        User user = userRepository.findByIdAndIsActiveTrue(id).orElseThrow(()->new RuntimeException("bla"));
+        User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("teste"));
         user.disable();
         userRepository.save(user);
     }

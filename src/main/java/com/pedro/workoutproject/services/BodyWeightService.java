@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 public class BodyWeightService {
 
@@ -24,25 +26,24 @@ public class BodyWeightService {
 
     @Transactional
     public ReturnBodyWeightDto createBodyWeight(CreateBodyWeightDto createBodyWeightDto){
-        User user = userRepository.findByIdAndIsActiveTrue(createBodyWeightDto.userId()).orElseThrow(()->new RuntimeException("teste"));
+        User user = userRepository.findById(createBodyWeightDto.userId()).orElseThrow(()->new RuntimeException("teste"));
         BodyWeight bodyWeight = new BodyWeight(createBodyWeightDto.value(),user);
         bodyWeightRepository.save(bodyWeight);
         return new ReturnBodyWeightDto(bodyWeight);
     }
 
     public ReturnBodyWeightDto getBodyWeightById(String id){
-        BodyWeight bodyWeight = bodyWeightRepository.findBodyWeightByIdAndIsActiveTrue(id).orElseThrow(()->new RuntimeException("teste"));
+        BodyWeight bodyWeight = bodyWeightRepository.findById(id).orElseThrow(()->new RuntimeException("teste"));
         return new ReturnBodyWeightDto(bodyWeight);
     }
 
     public Page<ReturnBodyWeightDto> getBodyWeightByUserId(String userId, Pageable pageable){
-        userRepository.findByIdAndIsActiveTrue(userId).orElseThrow(()->new RuntimeException("Invalid"));
         return  bodyWeightRepository.findAllByUserIdId(userId, pageable).map(ReturnBodyWeightDto::new);
     }
 
     @Transactional
     public ReturnBodyWeightDto updateBodyWeight(String id, UpdateBodyWeightDto updateBodyWeightDto){
-        BodyWeight bodyWeight = bodyWeightRepository.findBodyWeightByIdAndIsActiveTrue(id).orElseThrow(()->new RuntimeException("teste"));
+        BodyWeight bodyWeight = bodyWeightRepository.findById(id).orElseThrow(()->new RuntimeException("teste"));
         bodyWeight.update(updateBodyWeightDto);
         bodyWeightRepository.save(bodyWeight);
         return new ReturnBodyWeightDto(bodyWeight);
@@ -50,8 +51,8 @@ public class BodyWeightService {
 
     @Transactional
     public void deleteBodyWeight(String id){
-        BodyWeight bodyWeight = bodyWeightRepository.findBodyWeightByIdAndIsActiveTrue(id).orElseThrow(()->new RuntimeException("teste"));
-        bodyWeight.disable();
-        bodyWeightRepository.save(bodyWeight);
+        BodyWeight bodyWeight = bodyWeightRepository.getReferenceById(id);
+        bodyWeight.setDeleteOn(LocalDateTime.now());
+        bodyWeightRepository.delete(bodyWeight);
     }
 }
