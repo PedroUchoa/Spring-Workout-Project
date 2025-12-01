@@ -2,7 +2,6 @@ package com.pedro.workoutproject.dtos.workoutDtos;
 
 import com.pedro.workoutproject.dtos.userDtos.ReturnUserOnWorkoutDto;
 import com.pedro.workoutproject.dtos.workoutExerciseDtos.ReturnWorkoutExerciseDto;
-import com.pedro.workoutproject.models.User;
 import com.pedro.workoutproject.models.Workout;
 
 import java.time.LocalDateTime;
