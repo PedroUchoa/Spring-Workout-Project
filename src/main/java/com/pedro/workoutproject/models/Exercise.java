@@ -8,8 +8,8 @@ import org.hibernate.annotations.SQLRestriction;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity(name = "Exercises")
-@Table(name = "exercises")
+@Entity(name = "Exercise")
+@Table(name = "exercise")
 @Getter
 @Setter
 @AllArgsConstructor

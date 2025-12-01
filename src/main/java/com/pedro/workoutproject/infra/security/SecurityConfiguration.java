@@ -1,4 +1,4 @@
-package com.pedro.workoutproject.configs.security;
+package com.pedro.workoutproject.infra.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

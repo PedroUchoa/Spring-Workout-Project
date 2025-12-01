@@ -2,6 +2,7 @@ package com.pedro.workoutproject.services;
 
 import com.pedro.workoutproject.dtos.exerciseDtos.CreateExerciseDto;
 import com.pedro.workoutproject.dtos.exerciseDtos.ReturnExerciseDto;
+import com.pedro.workoutproject.infra.Exceptions.exercise.ExerciseNotFoundException;
 import com.pedro.workoutproject.models.Exercise;
 import com.pedro.workoutproject.repositories.ExerciseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +25,17 @@ public class ExerciseService {
     }
 
     public Page<ReturnExerciseDto> getAllExercises(Pageable pageable) {
-        return exerciseRepository.findAllByIsActiveTrue(pageable).map(ReturnExerciseDto::new);
+        return exerciseRepository.findAll(pageable).map(ReturnExerciseDto::new);
     }
 
     public ReturnExerciseDto getExerciseById(String id) {
-        Exercise exercise = exerciseRepository.findByIdAndIsActiveTrue(id).orElseThrow();
+        Exercise exercise = exerciseRepository.findById(id).orElseThrow(()->new ExerciseNotFoundException(id));
         return new ReturnExerciseDto(exercise);
     }
 
     @Transactional
     public ReturnExerciseDto updateExercise(CreateExerciseDto createExerciseDto, String id){
-        Exercise exercise = exerciseRepository.findByIdAndIsActiveTrue(id).orElseThrow();
+        Exercise exercise = exerciseRepository.findById(id).orElseThrow(()->new ExerciseNotFoundException(id));
         exercise.update(createExerciseDto);
         exerciseRepository.save(exercise);
         return new ReturnExerciseDto(exercise);
@@ -42,7 +43,7 @@ public class ExerciseService {
 
     @Transactional
     public void deleteExercise(String id){
-        Exercise exercise = exerciseRepository.findByIdAndIsActiveTrue(id).orElseThrow();
+        Exercise exercise = exerciseRepository.findById(id).orElseThrow(()->new ExerciseNotFoundException(id));
         exercise.disable();
         exerciseRepository.save(exercise);
     }

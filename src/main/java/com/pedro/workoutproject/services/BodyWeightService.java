@@ -3,6 +3,8 @@ package com.pedro.workoutproject.services;
 import com.pedro.workoutproject.dtos.bodyWeightDtos.CreateBodyWeightDto;
 import com.pedro.workoutproject.dtos.bodyWeightDtos.ReturnBodyWeightDto;
 import com.pedro.workoutproject.dtos.bodyWeightDtos.UpdateBodyWeightDto;
+import com.pedro.workoutproject.infra.Exceptions.bodyWeightExceptions.BodyWeightNotFoundException;
+import com.pedro.workoutproject.infra.Exceptions.userExceptions.UserNotFoundException;
 import com.pedro.workoutproject.models.BodyWeight;
 import com.pedro.workoutproject.models.User;
 import com.pedro.workoutproject.repositories.BodyWeightRepository;
@@ -26,14 +28,14 @@ public class BodyWeightService {
 
     @Transactional
     public ReturnBodyWeightDto createBodyWeight(CreateBodyWeightDto createBodyWeightDto){
-        User user = userRepository.findById(createBodyWeightDto.userId()).orElseThrow(()->new RuntimeException("teste"));
+        User user = userRepository.findById(createBodyWeightDto.userId()).orElseThrow(()->new UserNotFoundException(createBodyWeightDto.userId()));
         BodyWeight bodyWeight = new BodyWeight(createBodyWeightDto.value(),user);
         bodyWeightRepository.save(bodyWeight);
         return new ReturnBodyWeightDto(bodyWeight);
     }
 
     public ReturnBodyWeightDto getBodyWeightById(String id){
-        BodyWeight bodyWeight = bodyWeightRepository.findById(id).orElseThrow(()->new RuntimeException("teste"));
+        BodyWeight bodyWeight = bodyWeightRepository.findById(id).orElseThrow(()->new BodyWeightNotFoundException(id));
         return new ReturnBodyWeightDto(bodyWeight);
     }
 
@@ -43,7 +45,7 @@ public class BodyWeightService {
 
     @Transactional
     public ReturnBodyWeightDto updateBodyWeight(String id, UpdateBodyWeightDto updateBodyWeightDto){
-        BodyWeight bodyWeight = bodyWeightRepository.findById(id).orElseThrow(()->new RuntimeException("teste"));
+            BodyWeight bodyWeight = bodyWeightRepository.findById(id).orElseThrow(()->new BodyWeightNotFoundException(id));
         bodyWeight.update(updateBodyWeightDto);
         bodyWeightRepository.save(bodyWeight);
         return new ReturnBodyWeightDto(bodyWeight);
@@ -51,8 +53,8 @@ public class BodyWeightService {
 
     @Transactional
     public void deleteBodyWeight(String id){
-        BodyWeight bodyWeight = bodyWeightRepository.getReferenceById(id);
-        bodyWeight.setDeleteOn(LocalDateTime.now());
-        bodyWeightRepository.delete(bodyWeight);
+        BodyWeight bodyWeight = bodyWeightRepository.findById(id).orElseThrow(()-> new BodyWeightNotFoundException(id));
+        bodyWeight.disable();
+        bodyWeightRepository.save(bodyWeight);
     }
 }

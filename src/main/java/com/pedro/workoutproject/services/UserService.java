@@ -4,6 +4,8 @@ import com.auth0.jwt.JWT;
 import com.pedro.workoutproject.dtos.userDtos.CreateUserDto;
 import com.pedro.workoutproject.dtos.userDtos.ReturnUserDto;
 import com.pedro.workoutproject.enumerated.Role;
+import com.pedro.workoutproject.infra.Exceptions.userExceptions.UserNotFoundException;
+import com.pedro.workoutproject.infra.Exceptions.userExceptions.UserWithEmailDuplicatedException;
 import com.pedro.workoutproject.models.User;
 import com.pedro.workoutproject.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ public class UserService {
 
     @Transactional
     public ReturnUserDto createUser(CreateUserDto createUserDto) {
+        if(userRepository.findAnyByEmailIncludingInactive(createUserDto.email()).isPresent()) throw new UserWithEmailDuplicatedException(createUserDto.email());
         String encryptedPassword = new BCryptPasswordEncoder().encode(createUserDto.password());
         User user = userRepository.save(new User(createUserDto.email(), encryptedPassword, Role.USER));
         return new ReturnUserDto(user);
@@ -33,19 +36,20 @@ public class UserService {
     }
 
     public ReturnUserDto getUserById(String id) {
-        User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("bla"));
+        User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
         return new ReturnUserDto(user);
     }
 
     public ReturnUserDto getUserByTokenJWT(String token) {
         String id = JWT.decode(token).getClaim("id").asString();
-        User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("bla"));
+        User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
         return new ReturnUserDto(user);
     }
 
     @Transactional
     public ReturnUserDto updateUser(CreateUserDto createUserDto, String id){
-        User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("bla"));
+        if(userRepository.findAnyByEmailIncludingInactive(createUserDto.email()).isPresent()) throw new UserWithEmailDuplicatedException(createUserDto.email());
+        User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
         user.updateUser(createUserDto);
         User updatedUser = userRepository.save(user);
         return new ReturnUserDto(updatedUser);
@@ -53,7 +57,7 @@ public class UserService {
 
     @Transactional
     public void deleteUser(String id){
-        User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("teste"));
+        User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
         user.disable();
         userRepository.save(user);
     }

@@ -1,4 +1,4 @@
-package com.pedro.workoutproject.configs.security;
+package com.pedro.workoutproject.infra.security;
 
 import com.pedro.workoutproject.models.User;
 import com.pedro.workoutproject.repositories.UserRepository;

@@ -1,7 +1,8 @@
 package com.pedro.workoutproject.dtos.workoutDtos;
 
-import com.pedro.workoutproject.dtos.userDtos.ReturnUserDto;
+import com.pedro.workoutproject.dtos.userDtos.ReturnUserOnWorkoutDto;
 import com.pedro.workoutproject.dtos.workoutExerciseDtos.ReturnWorkoutExerciseDto;
+import com.pedro.workoutproject.models.User;
 import com.pedro.workoutproject.models.Workout;
 
 import java.time.LocalDateTime;
@@ -13,8 +14,8 @@ public record ReturnWorkoutDto(String id,
                                LocalDateTime updateOn,
                                LocalDateTime startedOn,
                                LocalDateTime finishedOn,
-                               ReturnUserDto user,
-                               List<ReturnWorkoutExerciseDto> workoutExerciseDtos) {
+                               ReturnUserOnWorkoutDto user,
+                               List<ReturnWorkoutExerciseDto> workoutExercise) {
     public ReturnWorkoutDto(Workout workout) {
         this(workout.getId(),
                 workout.getNotes(),
@@ -22,7 +23,7 @@ public record ReturnWorkoutDto(String id,
                 workout.getUpdateOn(),
                 workout.getStartedOn(),
                 workout.getFinishedOn(),
-                new ReturnUserDto(workout.getUserId()),
+                new ReturnUserOnWorkoutDto(workout.getUserId()),
                 workout.getWorkoutExerciseList().stream().map(ReturnWorkoutExerciseDto::new).toList());
     }
 

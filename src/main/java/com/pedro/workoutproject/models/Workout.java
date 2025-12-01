@@ -10,6 +10,7 @@ import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "Workout")
@@ -39,7 +40,7 @@ public class Workout {
     @JsonBackReference
     private User userId;
     @OneToMany(mappedBy = "workoutId")
-    private List<WorkoutExercise> workoutExerciseList;
+    private List<WorkoutExercise> workoutExerciseList = new ArrayList<>();
 
     public Workout(CreateWorkoutDto createWorkoutDto, User user) {
         this.notes = createWorkoutDto.notes();

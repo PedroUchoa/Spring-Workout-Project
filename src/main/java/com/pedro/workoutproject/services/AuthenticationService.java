@@ -1,5 +1,6 @@
 package com.pedro.workoutproject.services;
 
+import com.pedro.workoutproject.infra.Exceptions.userExceptions.UserEmailNotFoundException;
 import com.pedro.workoutproject.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +16,7 @@ public class AuthenticationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email).orElseThrow(()->new RuntimeException("teste"));
+        return userRepository.findByEmail(email).orElseThrow(()->new UserEmailNotFoundException(email));
     }
 
 }
