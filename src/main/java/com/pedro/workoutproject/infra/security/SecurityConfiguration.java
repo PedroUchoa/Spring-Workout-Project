@@ -3,6 +3,7 @@ package com.pedro.workoutproject.infra.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,22 +23,27 @@ public class SecurityConfiguration {
     private SecurityFilter securityFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity){
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .cors(cors->{})
+                .cors(cors -> {
+                })
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(req->{
-                  req.anyRequest().permitAll();
+                .authorizeHttpRequests(req -> {
+                    req.requestMatchers(HttpMethod.POST, "/auth/login", "/api/user").permitAll();
+                    req.requestMatchers("/ws/**").permitAll();
+                    req.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
+                    req.requestMatchers("/api/exercise/**").hasRole("ADMIN");
+                    req.anyRequest().authenticated();
                 }).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration){
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) {
         return configuration.getAuthenticationManager();
     }
 
     @Bean
-    public PasswordEncoder encoder(){
+    public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
 

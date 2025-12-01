@@ -3,6 +3,7 @@ package com.pedro.workoutproject.infra.Exceptions.global;
 import com.pedro.workoutproject.infra.Exceptions.bodyWeightExceptions.BodyWeightNotFoundException;
 import com.pedro.workoutproject.infra.Exceptions.exercise.ExerciseNameNotFoundException;
 import com.pedro.workoutproject.infra.Exceptions.exercise.ExerciseNotFoundException;
+import com.pedro.workoutproject.infra.Exceptions.userExceptions.UserEmailNotFoundException;
 import com.pedro.workoutproject.infra.Exceptions.userExceptions.UserNotFoundException;
 import com.pedro.workoutproject.infra.Exceptions.userExceptions.UserWithEmailDuplicatedException;
 import com.pedro.workoutproject.infra.Exceptions.workoutExceptions.WorkoutNotFoundException;
@@ -53,6 +54,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(WorkoutExerciseNotFoundException.class)
     public ResponseEntity<ErrorMessage> handleWorkoutExerciseNotFoundException(Exception ex){
+        ErrorMessage threatResponse = new ErrorMessage(HttpStatus.NOT_FOUND,ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
+    }
+
+    @ExceptionHandler(UserEmailNotFoundException.class)
+    public ResponseEntity<ErrorMessage> handleUserEmailNotFoundException(Exception ex){
         ErrorMessage threatResponse = new ErrorMessage(HttpStatus.NOT_FOUND,ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
     }
