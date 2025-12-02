@@ -10,6 +10,7 @@ import com.pedro.workoutproject.infra.Exceptions.workoutExceptions.WorkoutNotFou
 import com.pedro.workoutproject.infra.Exceptions.workoutExerciseException.WorkoutExerciseNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -63,5 +64,12 @@ public class GlobalExceptionHandler {
         ErrorMessage threatResponse = new ErrorMessage(HttpStatus.NOT_FOUND,ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
     }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorMessage> handleBadCredentialsException(Exception ex){
+        ErrorMessage threatResponse = new ErrorMessage(HttpStatus.UNAUTHORIZED, "Login Or Password Incorrect, Please Try Again!");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(threatResponse);
+    }
+
 
 }
