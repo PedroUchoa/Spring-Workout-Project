@@ -10,6 +10,8 @@ import com.pedro.workoutproject.models.Workout;
 import com.pedro.workoutproject.repositories.UserRepository;
 import com.pedro.workoutproject.repositories.WorkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,22 +27,26 @@ public class WorkoutService {
     private UserRepository userRepository;
 
     @Transactional
+    @CacheEvict(value = "workout", allEntries = true)
     public ReturnWorkoutDto createWorkout(CreateWorkoutDto createWorkoutDto){
         User user = userRepository.findById(createWorkoutDto.userId()).orElseThrow(()->new UserNotFoundException(createWorkoutDto.userId()));
         Workout workout =  workoutRepository.save(new Workout(createWorkoutDto,user));
         return new ReturnWorkoutDto(workout);
     }
 
+    @Cacheable(value = "workout")
     public ReturnWorkoutDto getWorkoutById(String id){
         Workout workout = workoutRepository.findById(id).orElseThrow(()->new WorkoutNotFoundException(id));
         return new ReturnWorkoutDto(workout);
     }
 
+    @Cacheable(value = "workout")
     public Page<ReturnWorkoutDto> getAllWorkoutDto(Pageable pageable){
         return workoutRepository.findAll(pageable).map(ReturnWorkoutDto::new);
     }
 
     @Transactional
+    @CacheEvict(value = "workout", allEntries = true)
     public ReturnWorkoutDto updateWorkoutDto(UpdateWorkoutDto updateWorkoutDto, String id){
         Workout workout = workoutRepository.findById(id).orElseThrow(()->new WorkoutNotFoundException(id));
         workout.update(updateWorkoutDto);
@@ -49,6 +55,7 @@ public class WorkoutService {
     }
 
     @Transactional
+    @CacheEvict(value = "workout", allEntries = true)
     public void deleteWorkoutDto(String id){
         Workout workout = workoutRepository.findById(id).orElseThrow(()->new WorkoutNotFoundException(id));
         workout.disable();

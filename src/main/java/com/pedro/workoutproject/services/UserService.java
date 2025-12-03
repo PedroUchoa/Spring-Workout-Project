@@ -9,6 +9,8 @@ import com.pedro.workoutproject.infra.Exceptions.userExceptions.UserWithEmailDup
 import com.pedro.workoutproject.models.User;
 import com.pedro.workoutproject.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,6 +26,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Transactional
+    @CacheEvict(value = "user", allEntries = true)
     public ReturnUserDto createUser(CreateUserDto createUserDto) {
         if(userRepository.findAnyByEmailIncludingInactive(createUserDto.email()).isPresent()) throw new UserWithEmailDuplicatedException(createUserDto.email());
         String encryptedPassword = new BCryptPasswordEncoder().encode(createUserDto.password());
@@ -31,15 +34,18 @@ public class UserService {
         return new ReturnUserDto(user);
     }
 
+    @Cacheable(value = "user")
     public Page<ReturnUserDto> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable).map(ReturnUserDto::new);
     }
 
+    @Cacheable(value = "user")
     public ReturnUserDto getUserById(String id) {
         User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
         return new ReturnUserDto(user);
     }
 
+    @Cacheable(value = "user")
     public ReturnUserDto getUserByTokenJWT(String token) {
         String id = JWT.decode(token).getClaim("id").asString();
         User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
@@ -47,6 +53,7 @@ public class UserService {
     }
 
     @Transactional
+    @CacheEvict(value = "user", allEntries = true)
     public ReturnUserDto updateUser(CreateUserDto createUserDto, String id){
         if(userRepository.findAnyByEmailIncludingInactive(createUserDto.email()).isPresent()) throw new UserWithEmailDuplicatedException(createUserDto.email());
         User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
@@ -56,6 +63,7 @@ public class UserService {
     }
 
     @Transactional
+    @CacheEvict(value = "user", allEntries = true)
     public void deleteUser(String id){
         User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
         user.disable();
