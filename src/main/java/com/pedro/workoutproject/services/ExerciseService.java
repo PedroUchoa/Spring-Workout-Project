@@ -20,37 +20,37 @@ public class ExerciseService {
     private ExerciseRepository exerciseRepository;
 
     @Transactional
-    @CacheEvict(value = "exercise",allEntries = true)
+    @CacheEvict(value = "exercise", allEntries = true)
     public ReturnExerciseDto createExercise(com.pedro.workoutproject.dtos.exerciseDtos.CreateExerciseDto createExerciseDto) {
         Exercise exercise = new Exercise(createExerciseDto);
         exerciseRepository.save(exercise);
         return new ReturnExerciseDto(exercise);
     }
 
-    @Cacheable("exercise")
+    @Cacheable(value = "exercise")
     public Page<ReturnExerciseDto> getAllExercises(Pageable pageable) {
         return exerciseRepository.findAll(pageable).map(ReturnExerciseDto::new);
     }
 
     @Cacheable("exercise")
     public ReturnExerciseDto getExerciseById(String id) {
-        Exercise exercise = exerciseRepository.findById(id).orElseThrow(()->new ExerciseNotFoundException(id));
+        Exercise exercise = exerciseRepository.findById(id).orElseThrow(() -> new ExerciseNotFoundException(id));
         return new ReturnExerciseDto(exercise);
     }
 
     @Transactional
-    @CacheEvict(value = "exercise",allEntries = true)
-    public ReturnExerciseDto updateExercise(CreateExerciseDto createExerciseDto, String id){
-        Exercise exercise = exerciseRepository.findById(id).orElseThrow(()->new ExerciseNotFoundException(id));
+    @CacheEvict(value = "exercise", allEntries = true)
+    public ReturnExerciseDto updateExercise(CreateExerciseDto createExerciseDto, String id) {
+        Exercise exercise = exerciseRepository.findById(id).orElseThrow(() -> new ExerciseNotFoundException(id));
         exercise.update(createExerciseDto);
         exerciseRepository.save(exercise);
         return new ReturnExerciseDto(exercise);
     }
 
     @Transactional
-    @CacheEvict(value = "exercise",allEntries = true)
-    public void deleteExercise(String id){
-        Exercise exercise = exerciseRepository.findById(id).orElseThrow(()->new ExerciseNotFoundException(id));
+    @CacheEvict(value = "exercise", allEntries = true)
+    public void deleteExercise(String id) {
+        Exercise exercise = exerciseRepository.findById(id).orElseThrow(() -> new ExerciseNotFoundException(id));
         exercise.disable();
         exerciseRepository.save(exercise);
     }

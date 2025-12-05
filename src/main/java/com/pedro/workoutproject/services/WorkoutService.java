@@ -41,7 +41,7 @@ public class WorkoutService {
     }
 
     @Cacheable(value = "workout")
-    public Page<ReturnWorkoutDto> getAllWorkoutDto(Pageable pageable){
+    public Page<ReturnWorkoutDto> getAllWorkouts(Pageable pageable){
         return workoutRepository.findAll(pageable).map(ReturnWorkoutDto::new);
     }
 
@@ -56,7 +56,7 @@ public class WorkoutService {
 
     @Transactional
     @CacheEvict(value = "workout", allEntries = true)
-    public void deleteWorkoutDto(String id){
+    public void deleteWorkout(String id){
         Workout workout = workoutRepository.findById(id).orElseThrow(()->new WorkoutNotFoundException(id));
         workout.disable();
         workoutRepository.save(workout);

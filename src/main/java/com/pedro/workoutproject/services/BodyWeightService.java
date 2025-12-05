@@ -11,7 +11,6 @@ import com.pedro.workoutproject.repositories.BodyWeightRepository;
 import com.pedro.workoutproject.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,28 +28,29 @@ public class BodyWeightService {
 
     @Transactional
     @CacheEvict(value = "bodyWeight", allEntries = true)
-    public ReturnBodyWeightDto createBodyWeight(CreateBodyWeightDto createBodyWeightDto){
-        User user = userRepository.findById(createBodyWeightDto.userId()).orElseThrow(()->new UserNotFoundException(createBodyWeightDto.userId()));
-        BodyWeight bodyWeight = new BodyWeight(createBodyWeightDto.value(),user);
+    public ReturnBodyWeightDto createBodyWeight(CreateBodyWeightDto createBodyWeightDto) {
+        User user = userRepository.findById(createBodyWeightDto.userId()).orElseThrow(() -> new UserNotFoundException(createBodyWeightDto.userId()));
+        BodyWeight bodyWeight = new BodyWeight(createBodyWeightDto.value(), user);
         bodyWeightRepository.save(bodyWeight);
         return new ReturnBodyWeightDto(bodyWeight);
     }
 
     @Cacheable(value = "bodyWeight")
-    public ReturnBodyWeightDto getBodyWeightById(String id){
-        BodyWeight bodyWeight = bodyWeightRepository.findById(id).orElseThrow(()->new BodyWeightNotFoundException(id));
+    public ReturnBodyWeightDto getBodyWeightById(String id) {
+        BodyWeight bodyWeight = bodyWeightRepository.findById(id).orElseThrow(() -> new BodyWeightNotFoundException(id));
         return new ReturnBodyWeightDto(bodyWeight);
     }
 
     @Cacheable(value = "bodyWeight")
-    public Page<ReturnBodyWeightDto> getBodyWeightByUserId(String userId, Pageable pageable){
-        return  bodyWeightRepository.findAllByUserIdId(userId, pageable).map(ReturnBodyWeightDto::new);
+    public Page<ReturnBodyWeightDto> getBodyWeightByUserId(String userId, Pageable pageable) {
+        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        return bodyWeightRepository.findAllByUserIdId(userId, pageable).map(ReturnBodyWeightDto::new);
     }
 
     @Transactional
     @CacheEvict(value = "bodyWeight", allEntries = true)
-    public ReturnBodyWeightDto updateBodyWeight(String id, UpdateBodyWeightDto updateBodyWeightDto){
-            BodyWeight bodyWeight = bodyWeightRepository.findById(id).orElseThrow(()->new BodyWeightNotFoundException(id));
+    public ReturnBodyWeightDto updateBodyWeight(String id, UpdateBodyWeightDto updateBodyWeightDto) {
+        BodyWeight bodyWeight = bodyWeightRepository.findById(id).orElseThrow(() -> new BodyWeightNotFoundException(id));
         bodyWeight.update(updateBodyWeightDto);
         bodyWeightRepository.save(bodyWeight);
         return new ReturnBodyWeightDto(bodyWeight);
@@ -58,8 +58,8 @@ public class BodyWeightService {
 
     @Transactional
     @CacheEvict(value = "bodyWeight")
-    public void deleteBodyWeight(String id){
-        BodyWeight bodyWeight = bodyWeightRepository.findById(id).orElseThrow(()-> new BodyWeightNotFoundException(id));
+    public void deleteBodyWeight(String id) {
+        BodyWeight bodyWeight = bodyWeightRepository.findById(id).orElseThrow(() -> new BodyWeightNotFoundException(id));
         bodyWeight.disable();
         bodyWeightRepository.save(bodyWeight);
     }

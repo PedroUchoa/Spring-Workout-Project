@@ -30,7 +30,7 @@ public class WorkoutController {
 
     @GetMapping
     public ResponseEntity<Page<ReturnWorkoutDto>> returnAllWorkout(@PageableDefault(sort = {"id"}) Pageable pageable) {
-        Page<ReturnWorkoutDto> returnWorkoutDtoPage = workoutService.getAllWorkoutDto(pageable);
+        Page<ReturnWorkoutDto> returnWorkoutDtoPage = workoutService.getAllWorkouts(pageable);
         return ResponseEntity.ok(returnWorkoutDtoPage);
     }
 
@@ -48,7 +48,7 @@ public class WorkoutController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteWorkout(@PathVariable String id) {
-        workoutService.deleteWorkoutDto(id);
+        workoutService.deleteWorkout(id);
         return ResponseEntity.noContent().build();
     }
 
