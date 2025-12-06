@@ -18,11 +18,17 @@ Esse projeto foi desenvolvido para ajudar usuarios a catalogarem os seus treinos
   git clone https://github.com/PedroUchoa/Spring-Workout-Project
 ```
 
-#### 2- Importar e Executar o Projeto na IDE
+#### 2- Importação, Execução e Compilação do o Projeto na IDE
 
 - Importe o projeto em sua IDE como um projeto Maven.
 
 - Deixe que a IDE resolva e baixe todas as dependências do pom.xml.
+
+```bash
+  mvn clean package
+```
+
+- Rode o comando Maven para compilar o projeto antes da criação do container.
 
 #### 3- Rodando no Docker
 - Rode o comando docker para criação do container e uso da aplicação e banco de dados no docker. 
