@@ -61,7 +61,6 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
         LocalDateTime interval = LocalDateTime.now().minusMonths(time);
         List<BodyWeight> bodyWeightList = user.getWeightList().stream().filter(bodyWeight -> bodyWeight.getLoggedOn().isAfter(interval)).toList();
-        System.out.println(bodyWeightList);
         DoubleSummaryStatistics doubleSummaryStatistics = bodyWeightList.stream().mapToDouble(BodyWeight::getValue).summaryStatistics();
         return new ReturnBodyWeightStatisticDto(doubleSummaryStatistics.getCount(),doubleSummaryStatistics.getSum(),doubleSummaryStatistics.getAverage() ,doubleSummaryStatistics.getMin(), doubleSummaryStatistics.getMax());
     }
