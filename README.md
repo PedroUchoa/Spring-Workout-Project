@@ -46,8 +46,7 @@ http://localhost:8080/swagger-ui.html
 
 ## Screenshots
 
-![App Screenshot]()
-
+<img width="493" height="791" alt="Captura de tela 2025-12-06 185134" src="https://github.com/user-attachments/assets/f4cf9cff-a1fb-4213-b34b-88985d301188" />
 
 ## Funcionalidades
 
