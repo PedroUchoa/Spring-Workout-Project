@@ -47,19 +47,19 @@ public class BodyWeightServiceTest {
     @Test
     @DisplayName("Must Create a Body Weight Successfully")
     void createBodyWeightSuccess() {
-        CreateBodyWeightDto bodyWeightDto = new CreateBodyWeightDto(this.buildMockBodyWeight().getValue(), "1");
+        CreateBodyWeightDto bodyWeightDto = new CreateBodyWeightDto(this.buildMockBodyWeight().getValue(), "1",LocalDateTime.now());
 
         when(userRepository.findById("1")).thenReturn(Optional.of(this.buildMockUser()));
 
         this.bodyWeightService.createBodyWeight(bodyWeightDto);
 
-        verify(bodyWeightRepository, times(1)).save(new BodyWeight(bodyWeightDto.value(), this.buildMockUser()));
+        verify(bodyWeightRepository, times(1)).save(new BodyWeight(bodyWeightDto.value(), this.buildMockUser(),LocalDateTime.now()));
     }
 
     @Test
     @DisplayName("Must Thrown Exception When No Found An User With The Id Passed")
     void createBodyWeightError() {
-        CreateBodyWeightDto bodyWeightDto = new CreateBodyWeightDto(this.buildMockBodyWeight().getValue(), "1");
+        CreateBodyWeightDto bodyWeightDto = new CreateBodyWeightDto(this.buildMockBodyWeight().getValue(), "1",LocalDateTime.now());
 
         UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> bodyWeightService.createBodyWeight(bodyWeightDto));
 

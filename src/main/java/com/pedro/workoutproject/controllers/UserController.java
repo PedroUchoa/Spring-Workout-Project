@@ -1,5 +1,6 @@
 package com.pedro.workoutproject.controllers;
 
+import com.pedro.workoutproject.dtos.bodyWeightDtos.ReturnBodyWeightStatisticDto;
 import com.pedro.workoutproject.dtos.userDtos.CreateUserDto;
 import com.pedro.workoutproject.dtos.userDtos.ReturnUserDto;
 import com.pedro.workoutproject.services.UserService;
@@ -45,6 +46,12 @@ public class UserController {
     public ResponseEntity<ReturnUserDto> getUserByTokenJWT(@RequestHeader(name = "Authorization") String token) {
         ReturnUserDto returnUserDto = userService.getUserByTokenJWT(token.replace("Bearer ", ""));
         return ResponseEntity.ok(returnUserDto);
+    }
+
+    @GetMapping("/statistics/{id}")
+    public ResponseEntity<ReturnBodyWeightStatisticDto> getUserWeightStatistics(@RequestParam(required = false,defaultValue = "1") Integer interval,@PathVariable String id){
+        ReturnBodyWeightStatisticDto statisticDto = userService.getUserWeightStatistics(id,interval);
+        return ResponseEntity.ok(statisticDto);
     }
 
     @PutMapping("/{id}")

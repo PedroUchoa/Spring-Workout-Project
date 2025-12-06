@@ -1,11 +1,13 @@
 package com.pedro.workoutproject.services;
 
 import com.auth0.jwt.JWT;
+import com.pedro.workoutproject.dtos.bodyWeightDtos.ReturnBodyWeightStatisticDto;
 import com.pedro.workoutproject.dtos.userDtos.CreateUserDto;
 import com.pedro.workoutproject.dtos.userDtos.ReturnUserDto;
 import com.pedro.workoutproject.enumerated.Role;
 import com.pedro.workoutproject.infra.Exceptions.userExceptions.UserNotFoundException;
 import com.pedro.workoutproject.infra.Exceptions.userExceptions.UserWithEmailDuplicatedException;
+import com.pedro.workoutproject.models.BodyWeight;
 import com.pedro.workoutproject.models.User;
 import com.pedro.workoutproject.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.DoubleSummaryStatistics;
+import java.util.List;
 
 
 @Service
@@ -50,6 +55,15 @@ public class UserService {
         String id = JWT.decode(token).getClaim("id").asString();
         User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
         return new ReturnUserDto(user);
+    }
+
+    public ReturnBodyWeightStatisticDto getUserWeightStatistics(String id, Integer time){
+        User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
+        LocalDateTime interval = LocalDateTime.now().minusMonths(time);
+        List<BodyWeight> bodyWeightList = user.getWeightList().stream().filter(bodyWeight -> bodyWeight.getLoggedOn().isAfter(interval)).toList();
+        System.out.println(bodyWeightList);
+        DoubleSummaryStatistics doubleSummaryStatistics = bodyWeightList.stream().mapToDouble(BodyWeight::getValue).summaryStatistics();
+        return new ReturnBodyWeightStatisticDto(doubleSummaryStatistics.getCount(),doubleSummaryStatistics.getSum(),doubleSummaryStatistics.getAverage() ,doubleSummaryStatistics.getMin(), doubleSummaryStatistics.getMax());
     }
 
     @Transactional

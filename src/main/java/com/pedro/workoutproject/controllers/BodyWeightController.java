@@ -22,7 +22,7 @@ public class BodyWeightController {
     private BodyWeightService bodyWeightService;
 
     @PostMapping
-    public ResponseEntity<ReturnBodyWeightDto> creteBodyWeight(@RequestBody CreateBodyWeightDto createBodyWeightDto, UriComponentsBuilder uri) {
+    public ResponseEntity<ReturnBodyWeightDto> createBodyWeight(@RequestBody CreateBodyWeightDto createBodyWeightDto, UriComponentsBuilder uri) {
         ReturnBodyWeightDto returnBodyWeightDto = bodyWeightService.createBodyWeight(createBodyWeightDto);
         URI location = uri.path("/id")
                 .buildAndExpand(returnBodyWeightDto.id())

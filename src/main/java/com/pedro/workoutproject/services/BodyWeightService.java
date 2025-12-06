@@ -30,7 +30,7 @@ public class BodyWeightService {
     @CacheEvict(value = "bodyWeight", allEntries = true)
     public ReturnBodyWeightDto createBodyWeight(CreateBodyWeightDto createBodyWeightDto) {
         User user = userRepository.findById(createBodyWeightDto.userId()).orElseThrow(() -> new UserNotFoundException(createBodyWeightDto.userId()));
-        BodyWeight bodyWeight = new BodyWeight(createBodyWeightDto.value(), user);
+        BodyWeight bodyWeight = new BodyWeight(createBodyWeightDto.value(), user,createBodyWeightDto.loggedOn());
         bodyWeightRepository.save(bodyWeight);
         return new ReturnBodyWeightDto(bodyWeight);
     }

@@ -35,14 +35,14 @@ public class WorkoutService {
     }
 
     @Cacheable(value = "workout")
-    public ReturnWorkoutDto getWorkoutById(String id){
-        Workout workout = workoutRepository.findById(id).orElseThrow(()->new WorkoutNotFoundException(id));
-        return new ReturnWorkoutDto(workout);
+    public Page<ReturnWorkoutDto> getAllWorkouts(Pageable pageable){
+        return workoutRepository.findAll(pageable).map(ReturnWorkoutDto::new);
     }
 
     @Cacheable(value = "workout")
-    public Page<ReturnWorkoutDto> getAllWorkouts(Pageable pageable){
-        return workoutRepository.findAll(pageable).map(ReturnWorkoutDto::new);
+    public ReturnWorkoutDto getWorkoutById(String id){
+        Workout workout = workoutRepository.findById(id).orElseThrow(()->new WorkoutNotFoundException(id));
+        return new ReturnWorkoutDto(workout);
     }
 
     @Transactional

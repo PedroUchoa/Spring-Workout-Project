@@ -23,7 +23,6 @@ public class BodyWeight {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private Double value;
-    @CreationTimestamp
     private LocalDateTime loggedOn;
     private Boolean isActive;
     private LocalDateTime deleteOn;
@@ -32,9 +31,10 @@ public class BodyWeight {
     @JsonBackReference
     private User userId;
 
-    public BodyWeight(Double  value, User user) {
+    public BodyWeight(Double  value, User user, LocalDateTime loggedOn) {
         this.value = value;
         this.userId = user;
+        this.loggedOn = loggedOn;
         this.isActive = true;
     }
 
