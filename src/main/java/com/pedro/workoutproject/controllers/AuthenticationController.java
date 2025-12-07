@@ -2,7 +2,9 @@ package com.pedro.workoutproject.controllers;
 
 import com.pedro.workoutproject.dtos.authenticationDtos.AuthenticationDataDto;
 import com.pedro.workoutproject.dtos.authenticationDtos.DataTokenJWT;
+import com.pedro.workoutproject.dtos.authenticationDtos.RefreshTokenJWT;
 import com.pedro.workoutproject.models.User;
+import com.pedro.workoutproject.services.AuthenticationService;
 import com.pedro.workoutproject.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,15 +26,23 @@ public class AuthenticationController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private AuthenticationService authenticationService;
+
     @PostMapping("/login")
     public ResponseEntity<DataTokenJWT> makeLogin(@RequestBody AuthenticationDataDto data) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(data.email(), data.password());
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        authenticationManager.authenticate(authenticationToken);
+        DataTokenJWT dataTokenJWT = authenticationService.obtainToken(data);
+        return ResponseEntity.ok(dataTokenJWT);
 
-        String tokenJWT = tokenService.generateToken((User) authentication.getPrincipal());
+    }
 
-        return ResponseEntity.ok(new DataTokenJWT(tokenJWT));
 
+    @PostMapping("/refresh")
+    public ResponseEntity<DataTokenJWT> authRefreshToken(@RequestBody RefreshTokenJWT data) {
+        DataTokenJWT dataTokenJWT = authenticationService.obtainRefreshToken(data.refreshToken());
+        return ResponseEntity.ok(dataTokenJWT);
     }
 
 

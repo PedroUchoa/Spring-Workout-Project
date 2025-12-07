@@ -1,4 +1,4 @@
 package com.pedro.workoutproject.dtos.authenticationDtos;
 
-public record DataTokenJWT(String JWT) {
+public record DataTokenJWT(String JWT, String refreshToken) {
 }
