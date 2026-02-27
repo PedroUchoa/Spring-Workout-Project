@@ -4,6 +4,7 @@ import com.pedro.workoutproject.dtos.bodyWeightDtos.ReturnBodyWeightStatisticDto
 import com.pedro.workoutproject.dtos.userDtos.CreateUserDto;
 import com.pedro.workoutproject.dtos.userDtos.ReturnUserDto;
 import com.pedro.workoutproject.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<ReturnUserDto> createUser(@RequestBody CreateUserDto createUserDto, UriComponentsBuilder uri) {
+    public ResponseEntity<ReturnUserDto> createUser(@Valid  @RequestBody CreateUserDto createUserDto, UriComponentsBuilder uri) {
         ReturnUserDto returnUserDto = userService.createUser(createUserDto);
         URI location = uri.path("/id")
                 .buildAndExpand(returnUserDto.id())
@@ -55,7 +56,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReturnUserDto> updateUser(@PathVariable String id, @RequestBody CreateUserDto createUserDto) {
+    public ResponseEntity<ReturnUserDto> updateUser(@PathVariable String id,@Valid @RequestBody CreateUserDto createUserDto) {
         ReturnUserDto returnUserDto = userService.updateUser(createUserDto, id);
         return ResponseEntity.ok(returnUserDto);
     }

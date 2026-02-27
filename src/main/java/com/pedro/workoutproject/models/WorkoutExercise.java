@@ -46,29 +46,17 @@ public class WorkoutExercise {
         this.sets = createWorkoutExerciseDto.sets();
         this.reps = createWorkoutExerciseDto.reps();
         this.notes = createWorkoutExerciseDto.notes();
-        this.workoutId=workout;
+        this.workoutId = workout;
         this.exerciseId = exercise;
-        this.isActive =true;
+        this.isActive = true;
     }
 
     public void update(UpdateWorkoutExerciseDto updateWorkoutExerciseDto) {
+        setReps(updateWorkoutExerciseDto.reps());
+        setSets(updateWorkoutExerciseDto.sets());
+        setWeight(updateWorkoutExerciseDto.weight());
+        setNotes(updateWorkoutExerciseDto.notes());
 
-        if(updateWorkoutExerciseDto.reps() != null){
-            setReps(updateWorkoutExerciseDto.reps());
-        }
-
-
-        if(updateWorkoutExerciseDto.sets() != null){
-            setSets(updateWorkoutExerciseDto.sets());
-        }
-
-        if(updateWorkoutExerciseDto.weight() != null){
-            setWeight(updateWorkoutExerciseDto.weight());
-        }
-
-        if(!updateWorkoutExerciseDto.notes().isBlank()){
-            setNotes(updateWorkoutExerciseDto.notes());
-        }
     }
 
     public void disable() {

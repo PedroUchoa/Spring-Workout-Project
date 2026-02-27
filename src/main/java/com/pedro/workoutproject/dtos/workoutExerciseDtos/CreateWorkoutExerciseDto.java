@@ -1,9 +1,19 @@
 package com.pedro.workoutproject.dtos.workoutExerciseDtos;
 
-public record CreateWorkoutExerciseDto(Integer weight,
-                                       Integer sets,
-                                       Integer reps,
-                                       String notes,
-                                       String workoutId,
-                                       String exerciseName) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record CreateWorkoutExerciseDto(
+        @NotNull(message = "Weight Is Required")
+        Integer weight,
+        @NotNull(message = "Sets Are Required")
+        Integer sets,
+        @NotNull(message = "Reps Are Required")
+        Integer reps,
+        @NotBlank(message = "Notes Are Required")
+        String notes,
+        @NotBlank(message = "WorkoutId Is Required")
+        String workoutId,
+        @NotBlank(message = "Exercise Name Is Required")
+        String exerciseName) {
 }

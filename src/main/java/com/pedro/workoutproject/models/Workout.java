@@ -51,15 +51,9 @@ public class Workout {
     }
 
     public void update(UpdateWorkoutDto updateWorkoutDto) {
-        if (!updateWorkoutDto.notes().isBlank()){
-            setNotes(updateWorkoutDto.notes());
-        }
-        if (updateWorkoutDto.startedOn() != null){
-            setUpdateOn(updateWorkoutDto.startedOn());
-        }
-        if (updateWorkoutDto.finishedOn() != null){
-            setFinishedOn(updateWorkoutDto.finishedOn());
-        }
+        setNotes(updateWorkoutDto.notes());
+        setUpdateOn(updateWorkoutDto.startedOn());
+        setFinishedOn(updateWorkoutDto.finishedOn());
     }
 
     public void disable() {

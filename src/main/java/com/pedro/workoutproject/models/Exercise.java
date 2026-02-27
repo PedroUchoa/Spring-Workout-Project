@@ -35,12 +35,9 @@ public class Exercise {
     }
 
     public void update(CreateExerciseDto createExerciseDto) {
-        if(!createExerciseDto.name().isBlank()){
-            setName(createExerciseDto.name());
-        }
-        if(!createExerciseDto.type().isBlank()){
-            setType(createExerciseDto.type());
-        }
+        setName(createExerciseDto.name());
+        setType(createExerciseDto.type());
+
     }
 
     public void disable() {

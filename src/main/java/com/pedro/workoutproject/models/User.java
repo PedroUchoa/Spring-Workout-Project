@@ -54,7 +54,8 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(role == Role.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        if (role == Role.ADMIN)
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
@@ -84,14 +85,9 @@ public class User implements UserDetails {
     }
 
     public void updateUser(CreateUserDto createUserDto) {
+        setEmail(createUserDto.email());
+        setPassword(createUserDto.password());
 
-        if(!createUserDto.email().isBlank()){
-            setEmail(createUserDto.email());
-        }
-
-        if(!createUserDto.password().isBlank()){
-            setPassword(createUserDto.password());
-        }
 
     }
 

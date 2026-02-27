@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.pedro.workoutproject.dtos.bodyWeightDtos.UpdateBodyWeightDto;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
@@ -31,7 +30,7 @@ public class BodyWeight {
     @JsonBackReference
     private User userId;
 
-    public BodyWeight(Double  value, User user, LocalDateTime loggedOn) {
+    public BodyWeight(Double value, User user, LocalDateTime loggedOn) {
         this.value = value;
         this.userId = user;
         this.loggedOn = loggedOn;
@@ -39,9 +38,8 @@ public class BodyWeight {
     }
 
     public void update(UpdateBodyWeightDto updateBodyWeightDto) {
-        if(updateBodyWeightDto.value() != null){
-            setValue(updateBodyWeightDto.value());
-        }
+        setValue(updateBodyWeightDto.value());
+
     }
 
     public void disable() {

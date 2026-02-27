@@ -1,4 +1,8 @@
 package com.pedro.workoutproject.dtos.bodyWeightDtos;
 
-public record UpdateBodyWeightDto(Double value) {
-}
+import jakarta.validation.constraints.NotNull;
+
+public record UpdateBodyWeightDto(
+        @NotNull(message = "Value Is Required")
+        Double value
+) {}

@@ -1,4 +1,10 @@
 package com.pedro.workoutproject.dtos.exerciseDtos;
 
-public record CreateExerciseDto(String name, String type) {
+import jakarta.validation.constraints.NotBlank;
+
+public record CreateExerciseDto(
+        @NotBlank(message = "Name Is Required")
+        String name,
+        @NotBlank(message = "Type Is Required")
+        String type) {
 }

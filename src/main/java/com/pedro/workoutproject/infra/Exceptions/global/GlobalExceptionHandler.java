@@ -11,8 +11,11 @@ import com.pedro.workoutproject.infra.Exceptions.workoutExerciseException.Workou
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.Objects;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -69,6 +72,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handleBadCredentialsException(Exception ex){
         ErrorMessage threatResponse = new ErrorMessage(HttpStatus.UNAUTHORIZED, "Login Or Password Incorrect, Please Try Again!");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(threatResponse);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
+        ErrorMessage threatResponse = new ErrorMessage(HttpStatus.CONFLICT, Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(threatResponse);
     }
 
 

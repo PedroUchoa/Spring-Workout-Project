@@ -4,6 +4,7 @@ import com.pedro.workoutproject.dtos.exerciseDtos.CreateExerciseDto;
 import com.pedro.workoutproject.dtos.exerciseDtos.ReturnExerciseDto;
 import com.pedro.workoutproject.services.ExerciseService;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,7 @@ public class ExerciseController {
     private ExerciseService exerciseService;
 
     @PostMapping
-    public ResponseEntity<ReturnExerciseDto> createExercise(@RequestBody CreateExerciseDto createExerciseDto, UriComponentsBuilder uri){
+    public ResponseEntity<ReturnExerciseDto> createExercise(@Valid  @RequestBody CreateExerciseDto createExerciseDto, UriComponentsBuilder uri){
         ReturnExerciseDto returnExerciseDto = exerciseService.createExercise(createExerciseDto);
         URI location = uri.path("/id")
                 .buildAndExpand(returnExerciseDto.id())
@@ -44,7 +45,7 @@ public class ExerciseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReturnExerciseDto> updateExercise(@PathVariable String id, @RequestBody CreateExerciseDto createExerciseDto){
+    public ResponseEntity<ReturnExerciseDto> updateExercise(@PathVariable String id, @Valid @RequestBody CreateExerciseDto createExerciseDto){
         ReturnExerciseDto returnExerciseDto = exerciseService.updateExercise(createExerciseDto,id);
         return ResponseEntity.ok(returnExerciseDto);
     }
