@@ -31,7 +31,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Transactional
-    @CacheEvict(value = "user", allEntries = true)
+    @CacheEvict(value = {"user","workout"}, allEntries = true)
     public ReturnUserDto createUser(CreateUserDto createUserDto) {
         if(userRepository.findAnyByEmailIncludingInactive(createUserDto.email()).isPresent()) throw new UserWithEmailDuplicatedException(createUserDto.email());
         String encryptedPassword = new BCryptPasswordEncoder().encode(createUserDto.password());
@@ -50,7 +50,7 @@ public class UserService {
         return new ReturnUserDto(user);
     }
 
-    @Cacheable(value = "user")
+    @Cacheable(value = {"user","workout"})
     public ReturnUserDto getUserByTokenJWT(String token) {
         String id = JWT.decode(token).getClaim("id").asString();
         User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
@@ -66,7 +66,7 @@ public class UserService {
     }
 
     @Transactional
-    @CacheEvict(value = "user", allEntries = true)
+    @CacheEvict(value = {"user","workout"}, allEntries = true)
     public ReturnUserDto updateUser(CreateUserDto createUserDto, String id){
         if(userRepository.findAnyByEmailIncludingInactive(createUserDto.email()).isPresent()) throw new UserWithEmailDuplicatedException(createUserDto.email());
         User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
@@ -76,7 +76,7 @@ public class UserService {
     }
 
     @Transactional
-    @CacheEvict(value = "user", allEntries = true)
+    @CacheEvict(value = {"user","workout"}, allEntries = true)
     public void deleteUser(String id){
         User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException(id));
         user.disable();

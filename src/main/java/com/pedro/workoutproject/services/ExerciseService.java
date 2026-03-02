@@ -20,7 +20,7 @@ public class ExerciseService {
     private ExerciseRepository exerciseRepository;
 
     @Transactional
-    @CacheEvict(value = "exercise", allEntries = true)
+    @CacheEvict(value = {"exercise","user","workout","workoutExercise"}, allEntries = true)
     public ReturnExerciseDto createExercise(com.pedro.workoutproject.dtos.exerciseDtos.CreateExerciseDto createExerciseDto) {
         Exercise exercise = new Exercise(createExerciseDto);
         exerciseRepository.save(exercise);
@@ -39,7 +39,7 @@ public class ExerciseService {
     }
 
     @Transactional
-    @CacheEvict(value = "exercise", allEntries = true)
+    @CacheEvict(value = {"exercise","user","workout","workoutExercise"}, allEntries = true)
     public ReturnExerciseDto updateExercise(CreateExerciseDto createExerciseDto, String id) {
         Exercise exercise = exerciseRepository.findById(id).orElseThrow(() -> new ExerciseNotFoundException(id));
         exercise.update(createExerciseDto);
@@ -48,7 +48,7 @@ public class ExerciseService {
     }
 
     @Transactional
-    @CacheEvict(value = "exercise", allEntries = true)
+    @CacheEvict(value = {"exercise","user","workout","workoutExercise"}, allEntries = true)
     public void deleteExercise(String id) {
         Exercise exercise = exerciseRepository.findById(id).orElseThrow(() -> new ExerciseNotFoundException(id));
         exercise.disable();

@@ -33,7 +33,7 @@ public class WorkoutExerciseService {
     private ExerciseRepository exerciseRepository;
 
     @Transactional
-    @CacheEvict(value = "workoutExercise", allEntries = true)
+    @CacheEvict(value = {"workoutExercise","user","workout"}, allEntries = true)
     public ReturnWorkoutExerciseDto createWorkoutExercise(CreateWorkoutExerciseDto createWorkoutExerciseDto){
         Workout workout = workoutRepository.findById(createWorkoutExerciseDto.workoutId()).orElseThrow(()->new WorkoutNotFoundException(createWorkoutExerciseDto.workoutId()));
         Exercise exercise = exerciseRepository.findByName(createWorkoutExerciseDto.exerciseName()).orElseThrow(()->new ExerciseNameNotFoundException(createWorkoutExerciseDto.exerciseName()));
@@ -53,7 +53,7 @@ public class WorkoutExerciseService {
     }
 
     @Transactional
-    @CacheEvict(value = "workoutExercise", allEntries = true)
+    @CacheEvict(value = {"workoutExercise","user","workout"}, allEntries = true)
     public ReturnWorkoutExerciseDto updateWorkoutExercise(UpdateWorkoutExerciseDto updateWorkoutExerciseDto, String id){
         WorkoutExercise workoutExercise = workoutExerciseRepository.findById(id).orElseThrow(()-> new WorkoutExerciseNotFoundException(id));
         workoutExercise.update(updateWorkoutExerciseDto);
@@ -62,7 +62,7 @@ public class WorkoutExerciseService {
     }
 
     @Transactional
-    @CacheEvict(value = "workoutExercise", allEntries = true)
+    @CacheEvict(value = {"workoutExercise","user","workout"}, allEntries = true)
     public void deleteWorkoutExercise(String id){
         WorkoutExercise workoutExercise = workoutExerciseRepository.findById(id).orElseThrow(()->new WorkoutExerciseNotFoundException(id));
         workoutExercise.disable();

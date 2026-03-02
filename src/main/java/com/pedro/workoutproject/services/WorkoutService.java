@@ -27,7 +27,7 @@ public class WorkoutService {
     private UserRepository userRepository;
 
     @Transactional
-    @CacheEvict(value = "workout", allEntries = true)
+    @CacheEvict(value = {"workout","user"}, allEntries = true)
     public ReturnWorkoutDto createWorkout(CreateWorkoutDto createWorkoutDto){
         User user = userRepository.findById(createWorkoutDto.userId()).orElseThrow(()->new UserNotFoundException(createWorkoutDto.userId()));
         Workout workout =  workoutRepository.save(new Workout(createWorkoutDto,user));
@@ -46,7 +46,7 @@ public class WorkoutService {
     }
 
     @Transactional
-    @CacheEvict(value = "workout", allEntries = true)
+    @CacheEvict(value = {"workout","user"}, allEntries = true)
     public ReturnWorkoutDto updateWorkoutDto(UpdateWorkoutDto updateWorkoutDto, String id){
         Workout workout = workoutRepository.findById(id).orElseThrow(()->new WorkoutNotFoundException(id));
         workout.update(updateWorkoutDto);
@@ -55,7 +55,7 @@ public class WorkoutService {
     }
 
     @Transactional
-    @CacheEvict(value = "workout", allEntries = true)
+    @CacheEvict(value = {"workout","user"}, allEntries = true)
     public void deleteWorkout(String id){
         Workout workout = workoutRepository.findById(id).orElseThrow(()->new WorkoutNotFoundException(id));
         workout.disable();

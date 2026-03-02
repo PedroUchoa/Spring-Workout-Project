@@ -27,7 +27,7 @@ public class BodyWeightService {
     private UserRepository userRepository;
 
     @Transactional
-    @CacheEvict(value = "bodyWeight", allEntries = true)
+    @CacheEvict(value = {"bodyWeight", "user"}, allEntries = true)
     public ReturnBodyWeightDto createBodyWeight(CreateBodyWeightDto createBodyWeightDto) {
         User user = userRepository.findById(createBodyWeightDto.userId()).orElseThrow(() -> new UserNotFoundException(createBodyWeightDto.userId()));
         BodyWeight bodyWeight = new BodyWeight(createBodyWeightDto.value(), user,createBodyWeightDto.loggedOn());
@@ -48,7 +48,7 @@ public class BodyWeightService {
     }
 
     @Transactional
-    @CacheEvict(value = "bodyWeight", allEntries = true)
+    @CacheEvict(value = {"bodyWeight", "user"}, allEntries = true)
     public ReturnBodyWeightDto updateBodyWeight(String id, UpdateBodyWeightDto updateBodyWeightDto) {
         BodyWeight bodyWeight = bodyWeightRepository.findById(id).orElseThrow(() -> new BodyWeightNotFoundException(id));
         bodyWeight.update(updateBodyWeightDto);
@@ -57,7 +57,7 @@ public class BodyWeightService {
     }
 
     @Transactional
-    @CacheEvict(value = "bodyWeight")
+    @CacheEvict(value = {"bodyWeight", "user"})
     public void deleteBodyWeight(String id) {
         BodyWeight bodyWeight = bodyWeightRepository.findById(id).orElseThrow(() -> new BodyWeightNotFoundException(id));
         bodyWeight.disable();
